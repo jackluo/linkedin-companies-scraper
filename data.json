@@ -1,0 +1,29 @@
+[
+    {
+        "website": "http://www.scrapehero.com", 
+        "description": "ScrapeHero is one of the top web scraping companies in the world for a reason.\r\nWe don't leave you with a \"self service\" screen to build your own scrapers.\r\nWe have real humans that will talk to you within hours of your request and help you with your need.\r\nEven though we are premier provider in this space, our investments in automation have allowed us to provide a completely \"full service\" to you at an affordable cost.\r\nGet in touch with us at https://scrapehero.com and experience our awesome customer service first hand", 
+        "founded": 2014, 
+        "street": null, 
+        "specialities": [
+            "Web Scraping Service", 
+            "Website Scraping", 
+            "Screen scraping", 
+            "Data scraping", 
+            "Web crawling", 
+            "Data as a Service", 
+            "Data extraction API", 
+            "Scrapy", 
+            "DaaS"
+        ], 
+        "size": "11-50 employees", 
+        "city": null, 
+        "zip": null, 
+        "url": "https://www.linkedin.com/company/scrapehero", 
+        "country": null, 
+        "industry": "Computer Software", 
+        "state": null, 
+        "company_name": "ScrapeHero", 
+        "follower_count": 48, 
+        "type": "Privately Held"
+    }
+]
