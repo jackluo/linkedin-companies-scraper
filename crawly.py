@@ -1,6 +1,7 @@
 ##################### HEAD #######################
 
 import requests
+import dryscrape
 from lxml import html
 
 import pprint
