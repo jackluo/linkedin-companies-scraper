@@ -6,36 +6,73 @@ from lxml import html
 import csv
 import os
 import json
+import random
+
 from time import sleep
 from exceptions import ValueError
 
 from crawly import *
+from login import *
 
 #################### CONFIG ######################
 
 filename_read = "companies_list.txt"
 filename_write = "companies.csv"
 filename_json = "companies.json"
+debug = True
 
 ################### FUNCTIONS ####################
 
 
-def get_company_url(company):
-    pass
+def linkedin_login(headers = {}):
 
- 
+    HOMEPAGE_URL = "https://www.linkedin.com"
+    LOGIN_URL = "https://www.linkedin.com/uas/login-submit"
+    login_info = {}
+
+    try:
+        response, client = load(HOMEPAGE_URL)
+        csrf = list(set(response.xpath('//*[@id="loginCsrfParam-login"]/@value')))[0]
+
+        login_info["session_key"] = email
+        login_info["session_password"] = password
+        login_info["loginCsrfParam"] = csrf
+        client.post(LOGIN_URL, data=login_info)
+
+    except:
+        print "[Error] Login error."
+        quit()
+
+    return client
+
+
+def get_company_url(company):
+
+    BASE_URL = "https://www.linkedin.com/vsearch/c?keywords="
+
+    client = linkedin_login()
+    query = encode("+", company)
+
+    url = BASE_URL + query 
+    response, client = load(url, client)
+    data = response.xpath('//a[@class="title main-headline"]/@href')
+    print data
+
+
 def parse_linkedin_companies(url):
 
     for i in xrange(5):
 
         try:
-            response = load(url)
+            response, client = load(url, client)
             data = response.xpath('//code[@id="stream-promo-top-bar-embed-id-content"]//text()')
+            print data
 
             if data:
 
                 try:
                     json_formatted_data = json.loads(data[0])
+
                     company_name = json_formatted_data['companyName'] if 'companyName' in json_formatted_data.keys() else None
                     size = json_formatted_data['size'] if 'size' in json_formatted_data.keys() else None
                     industry = json_formatted_data['industry'] if 'industry' in json_formatted_data.keys() else None
@@ -102,16 +139,16 @@ def parse_linkedin_companies(url):
 
 def main():
 
-    """
-    company_list = open(filename_read).read().split()
+
+    company_urls = open(filename_read)
+    extracted_data = []
+
+    company_list = open(filename_read)
 
     for company in company_list:
         company_url = get_company_url(company)
-        company_urls.append(company_url if company_url)
-    """
-
-    company_urls = ['https://www.linkedin.com/company/scrapehero']
-    extracted_data = []
+        quit()
+        company_urls.append(company_url)
 
     for url in company_urls:
         data = parse_linkedin_companies(url)

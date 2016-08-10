@@ -3,6 +3,7 @@
 import requests
 from lxml import html
 
+import pprint
 import sys
 import csv
 
@@ -10,34 +11,45 @@ import csv
 
 
 # This function prompts the keyord and returns it with chosen character as encoding
-def prompt(character):
+def encode(character, query = None):
 
-    keywords = raw_input("[Info] Enter search query >>> ")
-    keywords = keywords.strip().replace(" ", character) 
+    if not query:
+        query = raw_input("[Info] Enter search query >>> ")
 
-    return keywords
+    query = query.strip().replace(" ", character) 
+
+    return query
 
 
 # This function fetches the website and returns an html object
-def load(url, headers = {}):
+def load(url, client = None, headers = {}):
 
     if not headers: 
         headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'}
 
+    if not client:
+        client = requests.Session()    
+
     try:
-        response = requests.get(url, headers = headers)
-        response = response.content.replace('<!--', '').replace('-->', '')
+        response = client.get(url, headers = headers)
+        
+        #print response.status_code # Response Code  
+        #print response.headers # Response Headers
+        file = open("url.html", 'w')
+        file.write(response.content)
+
     except:
         print "[ERROR] Connection error."
         quit()
 
     try:
+        response = response.content.replace('<!--', '').replace('-->', '')
         response = html.fromstring(response)
     except:
         print "[ERROR] Parsing error."
         quit()
 
-    return response
+    return response, client
 
 
 def pretty_print(objects, fields):
