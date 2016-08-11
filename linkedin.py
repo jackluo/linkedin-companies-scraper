@@ -1,9 +1,5 @@
 ##################### HEAD #######################
 
-import requests
-from lxml import html
-
-import csv
 import os
 import json
 import random
@@ -19,7 +15,6 @@ from login import *
 filename_read = "companies_list.txt"
 filename_write = "companies.csv"
 filename_json = "companies.json"
-debug = True
 
 ################### FUNCTIONS ####################
 
@@ -138,7 +133,6 @@ def parse_linkedin_companies(url):
 
 
 def main():
-
 
     company_urls = open(filename_read)
     extracted_data = []
