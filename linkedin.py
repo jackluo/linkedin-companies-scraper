@@ -139,6 +139,7 @@ def parse_linkedin_companies(url):
 def main():
 
     extracted_data = []
+    contents = []
     company_list = open(filename_read)
 
     browser = linkedin_login(username, password)
