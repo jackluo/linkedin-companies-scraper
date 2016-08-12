@@ -37,15 +37,18 @@ def get_company_url(company):
 
 def linkedin_login(username, password):
 
+    path_to_chromedriver = '/Users/Admin/Desktop/chromedriver' 
+    browser = webdriver.Chrome(executable_path = path_to_chromedriver)
+
     url = "http://linkedin.com"
 
     browser.get(url)
 
-    username = browser.find_element_by_id("login-email")
-    password = browser.find_element_by_id("login-password")
+    username_field = browser.find_element_by_id("login-email")
+    password_field = browser.find_element_by_id("login-password")
 
-    username.send_keys(username)
-    password.send_keys(password)
+    username_field.send_keys(username)
+    password_field.send_keys(password)
 
     form = browser.find_element_by_name("submit")
     form.submit()
