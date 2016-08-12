@@ -4,6 +4,8 @@ import os
 import json
 import random
 
+from selenium import webdriver
+
 from time import sleep
 from exceptions import ValueError
 
@@ -19,39 +21,41 @@ filename_json = "companies.json"
 ################### FUNCTIONS ####################
 
 
-def linkedin_login(headers = {}):
+def linkedin_login(username, password, browser = None):
 
-    HOMEPAGE_URL = "https://www.linkedin.com"
-    LOGIN_URL = "https://www.linkedin.com/uas/login-submit"
-    login_info = {}
+    path_to_chromedriver = '/Users/Admin/Desktop/chromedriver' 
+    if not browser: browser = webdriver.Chrome(executable_path = path_to_chromedriver)
 
-    try:
-        response, client = load(HOMEPAGE_URL)
-        csrf = list(set(response.xpath('//*[@id="loginCsrfParam-login"]/@value')))[0]
+    url = "http://linkedin.com"
 
-        login_info["session_key"] = email
-        login_info["session_password"] = password
-        login_info["loginCsrfParam"] = csrf
-        client.post(LOGIN_URL, data=login_info)
+    browser.get(url)
 
-    except:
-        print "[Error] Login error."
-        quit()
+    username_field = browser.find_element_by_id("login-email")
+    password_field = browser.find_element_by_id("login-password")
 
-    return client
+    username_field.send_keys(username)
+    password_field.send_keys(password)
 
+    form = browser.find_element_by_name("submit")
+    form.submit()
 
-def get_company_url(company):
+    return browser
+
+def get_company_url(company, browser):
+
+    contents = []
 
     BASE_URL = "https://www.linkedin.com/vsearch/c?keywords="
 
-    client = linkedin_login()
     query = encode("+", company)
 
     url = BASE_URL + query 
-    response, client = load(url, client)
-    data = response.xpath('//a[@class="title main-headline"]/@href')
-    print data
+    browser.get(url)
+    try: 
+        browser.find_element_by_xpath('//*[@class="title main-headline"]').click()
+        return browser.page_source
+    except:
+        return None
 
 
 def parse_linkedin_companies(url):
@@ -134,15 +138,14 @@ def parse_linkedin_companies(url):
 
 def main():
 
-    company_urls = open(filename_read)
     extracted_data = []
-
     company_list = open(filename_read)
 
+    browser = linkedin_login(username, password)
+
     for company in company_list:
-        company_url = get_company_url(company)
-        quit()
-        company_urls.append(company_url)
+        content = get_company_url(company, browser)
+        contents.append(content)
 
     for url in company_urls:
         data = parse_linkedin_companies(url)
