@@ -10,7 +10,7 @@ import csv
 
 #################### CONFIG ######################
 
-debug = True
+debug = False
 print_headers = False
 path_to_chromedriver = "/Users/Admin/Desktop/chromedriver"
 
