@@ -148,6 +148,8 @@ def main():
         content = get_company_url(company, browser)
         contents.append(content)
 
+    for content in contents: print content
+
     for url in company_urls:
         data = parse_linkedin_companies(url)
         extracted_data.append(data)
