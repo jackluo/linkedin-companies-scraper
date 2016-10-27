@@ -1,10 +1,11 @@
 ##################### HEAD #######################
 
+#Version 1.1
+
 import requests
 from selenium import webdriver
 from lxml import html
 
-import pprint
 import sys
 import csv
 
@@ -68,13 +69,11 @@ def load(url, client = None, headers = {}):
     return response, client
 
 
+# This function browses the web using Selenium
 def browse(url, client = None, headers = {}):
 
     if not headers: 
-        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'}
-
-    #if not client:
-    #    client = requests.Session()    
+        headers = {'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'} 
 
     try:
         browser = webdriver.Chrome(executable_path = path_to_chromedriver)
@@ -84,25 +83,7 @@ def browse(url, client = None, headers = {}):
         print "[ERROR] Connection error."
         quit()
 
-    #try:
-    #    response = response.content.replace('<!--', '').replace('-->', '')
-    #    response = html.fromstring(response)
-    #except:
-    #    print "[ERROR] Parsing error."
-    #    quit()
-
     return response, client
-
-
-def pretty_print(objects, fields):
-
-    print "-" * 80
-
-    for j in fields:
-        for i, obj in enumerate(objects):
-            i += 1
-            print "[{:2}]".format(i), getattr(obj, j)
-        print "-" * 80 
 
 
 # This function prints listings to console
