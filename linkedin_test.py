@@ -3,8 +3,7 @@ import csv, os, json
 import requests
 from exceptions import ValueError
 from time import sleep
- 
- 
+
 def linkedin_companies_parser(url):
     for i in range(5):
         try:
@@ -12,6 +11,7 @@ def linkedin_companies_parser(url):
             'User-Agent': 'Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.90 Safari/537.36'}
             response = requests.get(url, headers=headers)
             formatted_response = response.content.replace('<!--', '').replace('-->', '')
+            print formatted_response
             doc = html.fromstring(formatted_response)
             datafrom_xpath = doc.xpath('//code[@id="stream-promo-top-bar-embed-id-content"]//text()')
             if datafrom_xpath:
@@ -26,7 +26,7 @@ def linkedin_companies_parser(url):
                     website = json_formatted_data['website'] if 'website' in json_formatted_data.keys() else None
                     type = json_formatted_data['companyType'] if 'companyType' in json_formatted_data.keys() else None
                     specialities = json_formatted_data['specialties'] if 'specialties' in json_formatted_data.keys() else None
- 
+
                     if "headquarters" in json_formatted_data.keys():
                         city = json_formatted_data["headquarters"]['city'] if 'city' in json_formatted_data["headquarters"].keys() else None
                         country = json_formatted_data["headquarters"]['country'] if 'country' in json_formatted_data['headquarters'].keys() else None
@@ -43,7 +43,7 @@ def linkedin_companies_parser(url):
                         street2 = None
                         street = None
                         zip = None
- 
+
                     data = {
                                 'company_name': company_name,
                                 'size': size,
@@ -64,7 +64,7 @@ def linkedin_companies_parser(url):
                     return data
                 except:
                     print "cant parse page", url
- 
+
             # Retry in case of captcha or login page redirection
             if len(response.content) < 2000 or "trk=login_reg_redirect" in url:
                 if response.status_code == 404:
@@ -73,16 +73,16 @@ def linkedin_companies_parser(url):
                     raise ValueError('redirecting to login page or captcha found')
         except :
             print "retrying :",url
- 
+
 def readurls():
-    companyurls = ['https://www.linkedin.com/company/scrapehero']
+    companyurls = ['https://www.linkedin.com/company/vacaturebeurs']
     extracted_data = []
     for url in companyurls:
         extracted_data.append(linkedin_companies_parser(url))
         sleep(5)
         f = open('data.json', 'w')
         json.dump(extracted_data, f, indent=4)
- 
- 
+
+
 if __name__ == "__main__":
     readurls()
